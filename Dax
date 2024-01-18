@@ -17,3 +17,4 @@ return CALCULATE(final)
 var final= CALCULATE([& Oport Total 2$],KEEPFILTERS(topp))
 return final
 & Top total 3:=CALCULATE(SUMX(DISTINCT(CB[Cedis]),[& Top Total $]),ALLEXCEPT(CB,CB[Cedis]))
+For Ceros o blancos & Valor:=SWITCH(TRUE(),CALCULATE(SUM(cedsem[Valor]))=BLANK(),"Sin datos",CALCULATE(SUM(cedsem[Valor]))>0,CALCULATE(SUM(cedsem[Valor])))
