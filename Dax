@@ -18,3 +18,10 @@ var final= CALCULATE([& Oport Total 2$],KEEPFILTERS(topp))
 return final
 & Top total 3:=CALCULATE(SUMX(DISTINCT(CB[Cedis]),[& Top Total $]),ALLEXCEPT(CB,CB[Cedis]))
 For Ceros o blancos & Valor:=SWITCH(TRUE(),CALCULATE(SUM(cedsem[Valor]))=BLANK(),"Sin datos",CALCULATE(SUM(cedsem[Valor]))>0,CALCULATE(SUM(cedsem[Valor])))
+
+--Promociones a consumidor--
+& Canjes:=var Maxi= MAX(CedisParticipantesCanjes[Id Promo])
+return SUMX(DISTINCT(CB[Id Cedis]),
+SWITCH(TRUE(),  Maxi = 1 || Maxi = 2,CALCULATE(SUM(CedisParticipantesCanjes[Canjes]), FILTER(ALL(CedisParticipantesCanjes[Sem]),CedisParticipantesCanjes[Sem]>=3 && CedisParticipantesCanjes[Sem] <=13)),
+Maxi = 3,CALCULATE(SUM(CedisParticipantesCanjes[Canjes]), FILTER(ALL(CedisParticipantesCanjes[Sem]),CedisParticipantesCanjes[Sem]>=22 && CedisParticipantesCanjes[Sem] <=29)),
+Maxi = 4,CALCULATE(SUM(CedisParticipantesCanjes[Canjes]), FILTER(ALL(CedisParticipantesCanjes[Sem]),CedisParticipantesCanjes[Sem]>=37 && CedisParticipantesCanjes[Sem] <=44))))
