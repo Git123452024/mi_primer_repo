@@ -10,3 +10,27 @@ SELECT * FROM pedido45_49;
 SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'pedidodiario';
+
+join 
+SELECT
+    c.idcedis,
+    COALESCE(SUM(v.venta), 0) AS Venti,
+    COALESCE(SUM(p.plan), 0) AS Plani,
+    sk.sku AS sku,
+    s.semana AS semana
+FROM
+    prueba.cedis AS c
+CROSS JOIN
+    prueba4.sku AS sk
+CROSS JOIN
+    prueba4.semana AS s
+left JOIN
+    (SELECT idcedis, sku, semana, SUM(venta) AS venta FROM prueba2.venta GROUP BY idcedis, sku, semana) AS v
+    ON c.idcedis = v.idcedis AND sk.sku = v.sku AND s.semana = v.semana
+left JOIN
+    (SELECT idcedis, sku, semana, SUM(plan) AS plan FROM prueba3.plan GROUP BY idcedis, sku, semana) AS p
+    ON c.idcedis = p.idcedis AND sk.sku = p.sku AND s.semana = p.semana
+GROUP BY
+    c.idcedis, sk.sku, s.semana
+HAVING
+    COALESCE(SUM(v.venta), 0) <> 0 OR COALESCE(SUM(p.plan), 0) <> 0
